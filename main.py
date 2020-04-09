@@ -181,8 +181,11 @@ def battle(user_hand, opponent_hand, monsters):
     # user_monster = monsters[user_hand]['HP'] - monsters[opponent_hand]['STR']
     print()
     # keeps the battle going if all monsters are still alive
-    if opponent_monster_1 > 0 and user_monster_1 > 0:
-        if opponent_monster_2 > 0 and user_monster_2 > 0:
+    if opponent_monster_1 > 0 or opponent_monster_2 > 0:
+        print("Opp has 1 or more monsters alive")
+        if user_monster_1 > 0 or user_monster_2 > 0:
+            print("User has 1 or more monsters alive")
+            # need to fix this part and print new health on future rounds
             while (opponent_monster_1 > 0 and user_monster_1 > 0) or (opponent_monster_2 > 0 and user_monster_2 > 0):
                 input("Monsters still alive. Press anything to continue.")
                 opponent_monster_1 = opponent_monster_1 - monsters[user_hand[0]]['STR']
@@ -212,6 +215,7 @@ def battle(user_hand, opponent_hand, monsters):
                     us_hold = user_hand[i]
                     op_hold = opponent_hand[i]
                     print("[{0}, {1}]".format((monsters[us_hold]['HP']-monsters[op_hold]['STR']), monsters[us_hold]['STR']).center(5), end="")
+                print()
     if (opponent_monster_1 <= 0 and user_monster_1 <= 0) and (opponent_monster_2 <= 0 and user_monster_2 <=0):
         print("Draw.")
         winner = 'd'
