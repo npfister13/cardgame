@@ -231,7 +231,6 @@ def battle(user_hand, opponent_hand, monsters):
     return winner
 
 
-
 def play():
     print("Welcome to NGC. If you would to play, type \"play\" or \"quit\" to quit.")
     choice = input("> ").lower().strip()
