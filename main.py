@@ -31,6 +31,7 @@ def main():
                 'The Offraider': {'HP': 2, 'STR': 4},
                 'Grort': {'HP': 2, 'STR': 2},
                 'Pike': {'HP': 7, 'STR': 7},
+                'Dumb': {'HP': 12, 'STR': 12},
                 }
     rounds = 0
     while opponent_hp != 0 and user_hp != 0:
