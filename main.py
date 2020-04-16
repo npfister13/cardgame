@@ -136,7 +136,7 @@ def play_card(user_hand, opponent_hand, monsters, user_hp, opponent_hp):
     for i in range(len(user_hand)):
         print("[{0}]".format(user_hand[i]).center(10), end="")
     print()
-    print("\t",end="")
+    print("\t", end="")
     for i in range(len(user_hand)):
         us_hold = user_hand[i]
         print("[{0}, {1}]".format(monsters[us_hold]['HP'], monsters[us_hold]['STR']).center(5), end="")
@@ -147,27 +147,20 @@ def play_card(user_hand, opponent_hand, monsters, user_hp, opponent_hp):
     return battle(user_hand, opponent_hand, monsters)
 
 
-def battle(user_hand, opponent_hand, monsters):
-    # opp monster names
-    global winner
-    opponent_monster_1 = monsters[opponent_hand[0]]['HP']-monsters[user_hand[0]]['STR']
-    opponent_monster_2 = monsters[opponent_hand[1]]['HP']-monsters[user_hand[1]]['STR']
-    user_monster_1 = monsters[user_hand[0]]['HP']-monsters[opponent_hand[0]]['STR']
-    user_monster_2 = monsters[user_hand[1]]['HP']-monsters[opponent_hand[1]]['STR']
-
+def battle_opponent_hand(user_hand, opponent_hand, monsters):
     for i in range(len(opponent_hand)):
         print("[{0}]".format(opponent_hand[i]).center(10), end="")
     print()
     print("\t", end="")
-    # opp monster hp
     for i in range(len(opponent_hand)):
         us_hold = user_hand[i]
         op_hold = opponent_hand[i]
-        print("[{0}, {1}]".format((monsters[op_hold]['HP']-monsters[us_hold]['STR']), monsters[op_hold]['STR']).center(5), end=" ")
-    print()
-    print("-" * 20)
-    print()
-    # user monster names
+        print(
+            "[{0}, {1}]".format((monsters[op_hold]['HP'] - monsters[us_hold]['STR']), monsters[op_hold]['STR']).center(
+                5), end=" ")
+
+
+def battle_user_hand(user_hand, opponent_hand, monsters):
     for i in range(len(user_hand)):
         print("[{0}]".format(user_hand[i]).center(10), end="")
     print()
@@ -176,7 +169,38 @@ def battle(user_hand, opponent_hand, monsters):
     for i in range(len(user_hand)):
         us_hold = user_hand[i]
         op_hold = opponent_hand[i]
-        print("[{0}, {1}]".format((monsters[us_hold]['HP']-monsters[op_hold]['STR']), monsters[us_hold]['STR']).center(5), end="")
+        print(
+            "[{0}, {1}]".format((monsters[us_hold]['HP'] - monsters[op_hold]['STR']), monsters[us_hold]['STR']).center(
+                5), end="")
+
+
+def battle(user_hand, opponent_hand, monsters):
+    # opp monster names
+    global winner
+    op_1_alive = True
+    op_2_alive = True
+    us_1_alive = True
+    us_2_alive = True
+    opponent_monster_1 = monsters[opponent_hand[0]]['HP'] - monsters[user_hand[0]]['STR']
+    opponent_monster_2 = monsters[opponent_hand[1]]['HP'] - monsters[user_hand[1]]['STR']
+    user_monster_1 = monsters[user_hand[0]]['HP'] - monsters[opponent_hand[0]]['STR']
+    user_monster_2 = monsters[user_hand[1]]['HP'] - monsters[opponent_hand[1]]['STR']
+    if opponent_monster_1 <= 0:
+        op_1_alive = False
+    if opponent_monster_2 <= 0:
+        op_2_alive = False
+    if user_monster_1 <= 0:
+        us_1_alive = False
+    if user_monster_2 <= 0:
+        us_2_alive = False
+    # opp monster hp
+    battle_opponent_hand(user_hand, opponent_hand, monsters)
+    print()
+    print("-" * 20)
+    print()
+    # user monster names
+    battle_user_hand(user_hand, opponent_hand, monsters)
+
     # opponent_monster = monsters[opponent_hand]['HP'] - monsters[user_hand]['STR']
     # user_monster = monsters[user_hand]['HP'] - monsters[opponent_hand]['STR']
     print()
@@ -214,17 +238,26 @@ def battle(user_hand, opponent_hand, monsters):
                 for i in range(len(user_hand)):
                     us_hold = user_hand[i]
                     op_hold = opponent_hand[i]
-                    print("[{0}, {1}]".format((monsters[us_hold]['HP']-monsters[op_hold]['STR']), monsters[us_hold]['STR']).center(5), end="")
+                    print("[{0}, {1}]".format((monsters[us_hold]['HP'] - monsters[op_hold]['STR']),
+                                              monsters[us_hold]['STR']).center(5), end="")
                 print()
-    if (opponent_monster_1 <= 0 and user_monster_1 <= 0) and (opponent_monster_2 <= 0 and user_monster_2 <=0):
+                if opponent_monster_1 <= 0:
+                    op_1_alive = False
+                if opponent_monster_2 <= 0:
+                    op_2_alive = False
+                if user_monster_1 <= 0:
+                    us_1_alive = False
+                if user_monster_2 <= 0:
+                    us_2_alive = False
+    if (op_1_alive is False and us_1_alive is False) and (op_2_alive is False and us_2_alive is False):
         print("Draw.")
         winner = 'd'
         input("Press anything to continue.")
-    elif (opponent_monster_1 <= 0 and opponent_monster_2 <= 0) and (user_monster_1 > 0 or user_monster_2 > 0):
+    elif (op_1_alive is False and op_2_alive is False) and (us_1_alive is True or us_2_alive is True):
         print("You won. Opponent takes 1 damage.")
         winner = "o"
         input("Press anything to continue.")
-    elif (opponent_monster_1 > 0 or opponent_monster_2 > 0) and (user_monster_1 <= 0 and user_monster_2 <= 0):
+    elif (op_1_alive is True or op_2_alive is True) and (us_1_alive is False and us_2_alive is False):
         print("You lost. You take one damage.")
         winner = "u"
         input("Press anything to continue.")
