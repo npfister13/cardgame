@@ -1,0 +1,64 @@
+{ "monsters": [
+  { "monster-name": "Jerry",
+    "HP": 1,
+    "STR": 1
+  },
+  { "monster-name": "Volvath",
+    "HP": 2,
+    "STR": 1
+  },
+  { "monster-name": "Rat Man",
+    "HP": 1,
+    "STR": 2
+  },
+  { "monster-name": "Kularne",
+    "HP": 2,
+    "STR": 2
+  },
+  { "monster-name": "Underoather",
+    "HP": 3,
+    "STR": 3
+  },
+  { "monster-name": "Twinild",
+    "HP": 1,
+    "STR": 4
+  },
+  { "monster-name": "Trappe",
+    "HP": 5,
+    "STR": 2
+  },
+  { "monster-name": "Outlaster",
+    "HP": 10,
+    "STR": 1
+  },
+  { "monster-name": "Griever",
+    "HP": 5,
+    "STR": 6
+  },
+  { "monster-name": "Junilet",
+    "HP": 3,
+    "STR": 5
+  },
+  { "monster-name": "Ov",
+    "HP": 1,
+    "STR": 6
+  },
+  { "monster-name": "Aselone",
+    "HP": 12,
+    "STR": 3
+  },
+  { "monster-name": "The Offraider",
+    "HP": 2,
+    "STR": 4
+  },
+  { "monster-name": "Grort",
+    "HP": 2,
+    "STR": 2
+  },
+  { "monster-name": "Pike",
+    "HP": 7,
+    "STR": 7
+  }
+]
+
+}
