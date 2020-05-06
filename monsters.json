@@ -1,64 +1,62 @@
-{ "monsters": [
-  { "monster-name": "Jerry",
+[
+  { "Name": "Jerry",
     "HP": 1,
     "STR": 1
   },
-  { "monster-name": "Volvath",
+  { "Name": "Volvath",
     "HP": 2,
     "STR": 1
   },
-  { "monster-name": "Rat Man",
+  { "Name": "Rat Man",
     "HP": 1,
     "STR": 2
   },
-  { "monster-name": "Kularne",
+  { "Name": "Kularne",
     "HP": 2,
     "STR": 2
   },
-  { "monster-name": "Underoather",
+  { "Name": "Underoather",
     "HP": 3,
     "STR": 3
   },
-  { "monster-name": "Twinild",
+  { "Name": "Twinild",
     "HP": 1,
     "STR": 4
   },
-  { "monster-name": "Trappe",
+  { "Name": "Trappe",
     "HP": 5,
     "STR": 2
   },
-  { "monster-name": "Outlaster",
+  { "Name": "Outlaster",
     "HP": 10,
     "STR": 1
   },
-  { "monster-name": "Griever",
+  { "Name": "Griever",
     "HP": 5,
     "STR": 6
   },
-  { "monster-name": "Junilet",
+  { "Name": "Junilet",
     "HP": 3,
     "STR": 5
   },
-  { "monster-name": "Ov",
+  { "Name": "Ov",
     "HP": 1,
     "STR": 6
   },
-  { "monster-name": "Aselone",
+  { "Name": "Aselone",
     "HP": 12,
     "STR": 3
   },
-  { "monster-name": "The Offraider",
+  { "Name": "The Offraider",
     "HP": 2,
     "STR": 4
   },
-  { "monster-name": "Grort",
+  { "Name": "Grort",
     "HP": 2,
     "STR": 2
   },
-  { "monster-name": "Pike",
+  { "Name": "Pike",
     "HP": 7,
     "STR": 7
   }
 ]
-
-}
