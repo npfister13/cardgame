@@ -17,35 +17,23 @@
     <script src="./src/cardgame.js"></script>
     <header>
       <h1>Cardgame</h1>
-      <button>Start/Restart</button>
+      <button onclick="reset()">Start/Restart</button>
+      <button onclick="dealCards()">Deal Cards</button>
     </header>
     <main>
       <div class="interface">
         <div class="board">
+
           <div id="player-two" class="player player-top">
-            <h4>Player 2</h4>
-            <div class="player-cards">
-              <div class="card">
-                <span>name</span>
-                <span>A</span>
-                <span>D</span>
-              </div>
-            </div>
           </div>
+
           <div id="player-one" class="player player-bottom">
-            <h4>Player 1</h4>
-            <div class="player-cards">
-              <div class="card">
-                <span>name</span>
-                <span>A</span>
-                <span>D</span>
-              </div>
-            </div>
           </div>
+          
         </div>
         <div class="input-box">
           <span>></span>
-          <input id="playerinput" type="text" />
+          <input id="player-input" type="text" placeholder="enter text"/>
         </div>
       </div>
     </main>
