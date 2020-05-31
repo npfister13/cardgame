@@ -27,31 +27,33 @@ def main():
 
 def combat(user_hand, opponent_hand, user_hp, opponent_hp):
     print_board(user_hand, opponent_hand, user_hp, opponent_hp)
-    print("\n\tBattle start!")
+    print("\nBattle start!")
     whose_turn = determine_first()
     # monsters attack from left to right, so these will count up to the
     # last card in their hand
     op_monster_to_attack = 0
     us_monster_to_attack = 0
     if whose_turn == "o":
-        print("\tOpponent goes first.")
+        print("Opponent goes first.")
         monster_attacking(user_hand, opponent_hand, us_monster_to_attack,
-                          op_monster_to_attack, whose_turn)
+                                                     op_monster_to_attack, whose_turn, user_hp, opponent_hp)
     else:
-        print("\tYou go first.")
+        print("You go first.")
 
 
 # this handles calculations for when one monster attacks another
 def monster_attacking(user_hand, opponent_hand, us_monster_to_attack,
-                      op_monster_to_attack, whose_turn):
+                      op_monster_to_attack, whose_turn, user_hp, opponent_hp):
     if whose_turn == "o":
-        # grabs the monster from the opponents hand
-        op_monster = opponent_hand[op_monster_to_attack]
         # chooses a random card to attack
-        us_monster = user_hand[random.randint(0, len(user_hand))]
-        # opponent_hand[op_monster['name']]['hp'] = (opponent_hand[op_monster]['hp'] - us_monster['str'])
-        # user_hand[us_monster['name']]['hp'] = (user_hand[us_monster['hp']]) - op_monster['str']
-        print("{0} attacks {1}!".format(op_monster['name'], us_monster['name']))
+        us_monster = random.randint(0, len(user_hand) - 1)
+        opponent_hand[op_monster_to_attack]['hp'] = (opponent_hand[op_monster_to_attack]['hp'] -
+                                                     user_hand[us_monster]['str'])
+        user_hand[us_monster]['hp'] = (user_hand[us_monster]['hp']) - opponent_hand[op_monster_to_attack]['str']
+        print_board(user_hand, opponent_hand, user_hp, opponent_hp)
+        print()
+        print("{0} attacks {1}!".format(opponent_hand[op_monster_to_attack]['name'], user_hand[us_monster]['name']))
+        return user_hand, opponent_hand
 
 
 def determine_first():
@@ -61,6 +63,7 @@ def determine_first():
 
 
 # prints out the board, duh
+# TODO: have it to where print_board will only print a monster if its hp is above 0
 def print_board(user_hand, opponent_hand, user_hp, opponent_hp):
     for i in range(15):
         print("")
@@ -70,7 +73,7 @@ def print_board(user_hand, opponent_hand, user_hp, opponent_hp):
     print()
     print_hand(opponent_hand)
     print()
-    print("-"*30)
+    print("-" * 30)
     print("Your hp: {}".format(user_hp).center(30))
     for i in range(len(user_hand)):
         print("[{}]".format(user_hand[i]['name']).center(15), end="")
