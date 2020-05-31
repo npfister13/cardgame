@@ -1,62 +1,62 @@
 [
-  { "Name": "Jerry",
-    "HP": 1,
-    "STR": 1
+  { "name": "Jerry",
+    "hp": 1,
+    "str": 1
   },
-  { "Name": "Volvath",
-    "HP": 2,
-    "STR": 1
+  { "name": "Volvath",
+    "hp": 2,
+    "str": 1
   },
-  { "Name": "Rat Man",
-    "HP": 1,
-    "STR": 2
+  { "name": "Rat Man",
+    "hp": 1,
+    "str": 2
   },
-  { "Name": "Kularne",
-    "HP": 2,
-    "STR": 2
+  { "name": "Kularne",
+    "hp": 2,
+    "str": 2
   },
-  { "Name": "Underoather",
-    "HP": 3,
-    "STR": 3
+  { "name": "Underoather",
+    "hp": 3,
+    "str": 3
   },
-  { "Name": "Twinild",
-    "HP": 1,
-    "STR": 4
+  { "name": "Twinild",
+    "hp": 1,
+    "str": 4
   },
-  { "Name": "Trappe",
-    "HP": 5,
-    "STR": 2
+  { "name": "Trappe",
+    "hp": 5,
+    "str": 2
   },
-  { "Name": "Outlaster",
-    "HP": 10,
-    "STR": 1
+  { "name": "Outlaster",
+    "hp": 10,
+    "str": 1
   },
-  { "Name": "Griever",
-    "HP": 5,
-    "STR": 6
+  { "name": "Griever",
+    "hp": 5,
+    "str": 6
   },
-  { "Name": "Junilet",
-    "HP": 3,
-    "STR": 5
+  { "name": "Junilet",
+    "hp": 3,
+    "str": 5
   },
-  { "Name": "Ov",
-    "HP": 1,
-    "STR": 6
+  { "name": "Ov",
+    "hp": 1,
+    "str": 6
   },
-  { "Name": "Aselone",
-    "HP": 12,
-    "STR": 3
+  { "name": "Aselone",
+    "hp": 12,
+    "str": 3
   },
-  { "Name": "The Offraider",
-    "HP": 2,
-    "STR": 4
+  { "name": "The Offraider",
+    "hp": 2,
+    "str": 4
   },
-  { "Name": "Grort",
-    "HP": 2,
-    "STR": 2
+  { "name": "Grort",
+    "hp": 2,
+    "str": 2
   },
-  { "Name": "Pike",
-    "HP": 7,
-    "STR": 7
+  { "name": "Pike",
+    "hp": 7,
+    "str": 7
   }
 ]
