@@ -2,7 +2,6 @@ import random
 import time
 import json
 
-
 with open('monsters.json', 'r') as f:
     monsters_dict = json.load(f)
 
@@ -40,29 +39,65 @@ def main():
     user_hp = score.user_hp
     opponent_hp = score.opponent_hp
     user.draw()
+    user.draw()
+    opponent.draw()
     opponent.draw()
     print(user.hand)
     print(user.hand[0]['name'])
     for card in user.hand:
         print("[{}]".format(card['name']))
-    # user_hand = []
-    # opponent_hand = []
-    # add_card(user, opponent, monsters_dict)
-    # add_card(user, opponent, monsters_dict)
-    # print("Your hand: ")
-    # print(len(user_hand))
-    # for i in range(len(user_hand)):
-    #     print(user_hand[i]['name'])
-    #     print("[{0}, {1}]".format(user_hand[i]['hp'], user_hand[i]['str']))
 
     print_board(user, opponent, user_hp, opponent_hp)
+    print()
+    print("Do you want to keep your cards or switch cards? Keep = K, Switch = S")
+    choice = input("> ").casefold()
+    if choice == "s":
+        return_card = switch_card(user)
+        user.switch(return_card)
+        user.draw()
+        print_board(user, opponent, user_hp, opponent_hp)
+
     input("\nPress anything to continue.")
     # TODO: figure out how to handle combat
     # combat(user_hand, opponent_hand, user_hp, opponent_hp)
 
 
-def combat(user_hand, opponent_hand, user_hp, opponent_hp):
-    print_board(user_hand, opponent_hand, user_hp, opponent_hp)
+def switch_card(user):
+    for i in range(5):
+        print("")
+    print("Which card do you want to switch?")
+    i = 0
+    for card in user.hand:
+        print("[{}]".format(card['name']).center(15), end="")
+    print()
+    for card in user.hand:
+        print("[{}]".format(i).center(15), end="")
+        i += 1
+
+    print(i)
+    print()
+    while True:
+        try:
+            choose_card = int(input("> "))
+            if choose_card >= i:
+                print("too high")
+            elif choose_card < 0:
+                print("too low")
+            else:
+                break
+        except ValueError:
+            print("input a number")
+    i = 0
+    for card in user.hand:
+        if choose_card == i:
+            print("returning card")
+            return card
+        i+= 1
+
+
+
+def combat(user, opponent, user_hp, opponent_hp):
+    print_board(user, opponent, user_hp, opponent_hp)
     print("\nBattle start!")
     whose_turn = determine_first()
     # monsters attack from left to right, so these will count up to the
@@ -71,7 +106,7 @@ def combat(user_hand, opponent_hand, user_hp, opponent_hp):
     us_monster_to_attack = 0
     if whose_turn == "o":
         print("Opponent goes first.")
-        monster_attacking(user_hand, opponent_hand, us_monster_to_attack,
+        monster_attacking(user, opponent, us_monster_to_attack,
                           op_monster_to_attack, whose_turn, user_hp, opponent_hp)
     else:
         print("You go first.")
@@ -101,7 +136,7 @@ def determine_first():
 # prints out the board, duh
 # TODO: have it to where print_board will only print a monster if its hp is above 0
 def print_board(user, opponent, user_hp, opponent_hp):
-    for i in range(5):
+    for i in range(15):
         print("")
     print("Opponent hp: {}".format(opponent_hp).center(30))
     for card in opponent.hand:
@@ -123,13 +158,6 @@ def print_hand(cards):
         hp = i['hp']
         strength = i['str']
         print("[{0}, {1}] ".format(hp, strength).center(15), end="")
-
-# adds a card to both player's hand at the beginning of the round
-def add_card(user_hand, opponent_hand, monsters_dict):
-    user_hand.append(random.choice(monsters_dict))
-    opponent_hand.append(random.choice(monsters_dict))
-    print("User hand: ", user_hand)
-    print("Opponent hand: ", opponent_hand)
 
 
 main()
