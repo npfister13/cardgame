@@ -26,12 +26,12 @@ class Player:
         self.hand.append(drawn_card)
         print(self.hand)
 
-    # TODO: check this works
+    # remove a chosen card from the users hand
     def switch(self, card):
         monsters_dict.append(card)
         self.hand.remove(card)
 
-
+# TODO: check to see if cards are being re-added to monster dict when switching cards
 def main():
     user = Player()
     opponent = Player()
@@ -92,7 +92,7 @@ def switch_card(user):
         if choose_card == i:
             print("returning card")
             return card
-        i+= 1
+        i += 1
 
 
 
