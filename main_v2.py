@@ -24,12 +24,12 @@ class Player:
         drawn_card = random.choice(monsters_dict)
         monsters_dict.remove(drawn_card)
         self.hand.append(drawn_card)
-        print(self.hand)
 
     # remove a chosen card from the users hand
     def switch(self, card):
         monsters_dict.append(card)
         self.hand.remove(card)
+
 
 # TODO: check to see if cards are being re-added to monster dict when switching cards
 def main():
@@ -59,12 +59,12 @@ def main():
 
     input("\nPress anything to continue.")
     # TODO: figure out how to handle combat
-    # combat(user_hand, opponent_hand, user_hp, opponent_hp)
+    combat(user, opponent, user_hp, opponent_hp)
 
 
 def switch_card(user):
-    for i in range(5):
-        print("")
+    print()
+    print()
     print("Which card do you want to switch?")
     i = 0
     for card in user.hand:
@@ -73,8 +73,6 @@ def switch_card(user):
     for card in user.hand:
         print("[{}]".format(i).center(15), end="")
         i += 1
-
-    print(i)
     print()
     while True:
         try:
@@ -90,10 +88,8 @@ def switch_card(user):
     i = 0
     for card in user.hand:
         if choose_card == i:
-            print("returning card")
             return card
         i += 1
-
 
 
 def combat(user, opponent, user_hp, opponent_hp):
@@ -113,18 +109,19 @@ def combat(user, opponent, user_hp, opponent_hp):
 
 
 # this handles calculations for when one monster attacks another
-def monster_attacking(user_hand, opponent_hand, us_monster_to_attack,
+def monster_attacking(user, opponent, us_monster_to_attack,
                       op_monster_to_attack, whose_turn, user_hp, opponent_hp):
     if whose_turn == "o":
         # chooses a random card to attack
-        us_monster = random.randint(0, len(user_hand) - 1)
-        opponent_hand[op_monster_to_attack]['hp'] = (opponent_hand[op_monster_to_attack]['hp'] -
-                                                     user_hand[us_monster]['str'])
-        user_hand[us_monster]['hp'] = (user_hand[us_monster]['hp']) - opponent_hand[op_monster_to_attack]['str']
-        print_board(user_hand, opponent_hand, user_hp, opponent_hp)
+        user_hand = user.count('name')
+        us_monster = random.randint(0, user_hand - 1)
+        opponent[op_monster_to_attack]['hp'] = (opponent[op_monster_to_attack]['hp'] -
+                                                     user[us_monster]['str'])
+        user[us_monster]['hp'] = (user[us_monster]['hp']) - opponent[op_monster_to_attack]['str']
+        print_board(user, opponent, user_hp, opponent_hp)
         print()
-        print("{0} attacks {1}!".format(opponent_hand[op_monster_to_attack]['name'], user_hand[us_monster]['name']))
-        return user_hand, opponent_hand
+        print("{0} attacks {1}!".format(opponent[op_monster_to_attack]['name'], user[us_monster]['name']))
+        return user, opponent
 
 
 def determine_first():
