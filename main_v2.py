@@ -55,7 +55,6 @@ def main():
             user.draw()
             print_board(user, opponent, user_hp, opponent_hp)
 
-        press_continue()
         # TODO: figure out how to handle combat
         combat(user, opponent, user_hp, opponent_hp)
 
@@ -93,7 +92,13 @@ def switch_card(user):
 def combat(user, opponent, user_hp, opponent_hp):
     print_board(user, opponent, user_hp, opponent_hp)
     print("\nBattle start!")
-    whose_turn = determine_first()
+    whose_turn = None
+    if whose_turn is None:
+        whose_turn = determine_first()
+    elif whose_turn == "u":
+        whose_turn = "o"
+    elif whose_turn == "o":
+        whose_turn = "u"
     # monsters attack from left to right, so these will count up to the
     # last card in their hand
     op_monster_to_attack = 0
@@ -117,8 +122,21 @@ def opponent_attacking(user, opponent, op_monster_to_attack, user_hp, opponent_h
     us_monster = random.randint(0, user_hand - 1)
     op_card = opponent.hand
     us_card = user.hand
-    op_card[op_monster_to_attack]['hp'] = (op_card[op_monster_to_attack]['hp'] -
-                                           us_card[us_monster]['str'])
+    while True:
+        # choose a different monster to attack if the one chosen is already dead
+        if us_card[us_monster]['hp'] <= 0:
+            us_monster = random.randint(0, user_hand - 1)
+        else:
+            break
+    print("op monster to attack: {}".format(op_monster_to_attack))
+    try:
+        op_card[op_monster_to_attack]['hp'] = (op_card[op_monster_to_attack]['hp'] -
+                                               us_card[us_monster]['str'])
+    except IndexError:
+        print("IndexError caught, op_monster_to_attack outside of index range. Changing to 0.")
+        op_monster_to_attack = 0
+        op_card[op_monster_to_attack]['hp'] = (op_card[op_monster_to_attack]['hp'] -
+                                               us_card[us_monster]['str'])
     us_card[us_monster]['hp'] = (us_card[us_monster]['hp']) - op_card[op_monster_to_attack]['str']
     print_board(user, opponent, user_hp, opponent_hp)
     print()
@@ -128,13 +146,20 @@ def opponent_attacking(user, opponent, op_monster_to_attack, user_hp, opponent_h
 
 
 def user_attacking(user, opponent, us_monster_to_attack, user_hp, opponent_hp):
-    # chooses a random card to attack
+    # chooses a random card to attack, players always have an equal amount of cards
     opponent_hand = int(Player.number_of_cards / 2)
     op_monster = random.randint(0, opponent_hand - 1)
     op_card = opponent.hand
     us_card = user.hand
-    us_card[us_monster_to_attack]['hp'] = (us_card[us_monster_to_attack]['hp'] -
-                                           op_card[op_monster]['str'])
+    try:
+        us_card[us_monster_to_attack]['hp'] = (us_card[us_monster_to_attack]['hp'] -
+                                               op_card[op_monster]['str'])
+    except IndexError:
+        print("IndexError caught, us_monster_to_attack outside of index range. Changing to 0.")
+        us_monster_to_attack = 0
+        us_card[us_monster_to_attack]['hp'] = (us_card[us_monster_to_attack]['hp'] -
+                                               op_card[op_monster]['str'])
+
     op_card[op_monster]['hp'] = (op_card[op_monster]['hp']) - us_card[us_monster_to_attack]['str']
     print_board(user, opponent, user_hp, opponent_hp)
     print()
@@ -147,33 +172,54 @@ def user_attacking(user, opponent, us_monster_to_attack, user_hp, opponent_hp):
 def monster_attacking(user, opponent, us_monster_to_attack, op_monster_to_attack, whose_turn, user_hp, opponent_hp):
     user_cards_left = (Player.number_of_cards / 2)
     opponent_cards_left = (Player.number_of_cards / 2)
-    monsters_alive = True
-    if whose_turn == "o":
-        print("Beginning opponents turn")
-        while monsters_alive:
+    op_monsters_alive = True
+    us_monsters_alive = True
+    while op_monsters_alive and us_monsters_alive:
+        print(whose_turn)
+        if whose_turn == "o":
+            print("Beginning opponents turn")
             user, opponent, op_monster_to_attack, us_card, op_card = opponent_attacking(user, opponent,
                                                                                         op_monster_to_attack, user_hp,
                                                                                         opponent_hp)
-            print("Beginning for loop")
+            print(op_monster_to_attack)
             for i in op_card:
-                print("In for loop")
                 print(i['hp'])
-                #TODO: come back to here
-                if i['hp'] <= 0:
-                    pass
+                if i['hp'] > 1:
+                    op_monsters_alive = True
+                    break
                 else:
-                    monsters_alive = False
-        return user, opponent
+                    op_monsters_alive = False
+            if op_monsters_alive:
+                input("Monster alive. Continuing. Press anything.")
+            whose_turn = "u"
+        else:
+            print("Beginning users turn")
+            print("Us monster to attack: {}".format(us_monster_to_attack))
+            user, opponent, us_monster_to_attack, us_card, op_card = user_attacking(user, opponent,
+                                                                                    op_monster_to_attack, user_hp,
+                                                                                    opponent_hp)
+            for i in us_card:
+                if i['hp'] > 1:
+                    us_monsters_alive = True
+                    break
+                else:
+                    us_monsters_alive = False
+            if us_monsters_alive:
+                input("Monster alive. Continuing. Press anything.")
+                continue
+            whose_turn = "o"
     else:
-        user, opponent, us_monster_to_attack, us_card, op_card = user_attacking(user, opponent,
-                                                                                us_monster_to_attack, user_hp,
-                                                                                opponent_hp)
-        return user, opponent
+        if not op_monsters_alive:
+            print("Opponents monsters are dead. They lose 1 HP.")
+            opponent_hp -= 1
+        elif not us_monsters_alive:
+            pass
+            # TODO: pick up from here
+    return user, opponent, whose_turn, user_hp, opponent_hp
 
 
 def determine_first():
     # return random.choice(["o", "u"])
-    # TODO: change this back once opponent and user are finished
     return "o"
 
 
