@@ -40,6 +40,7 @@ class Player:
         self.hand.append(drawn_card)
         Player.number_of_cards += 1
 
+    # TODO: pickup here. you are trying to figure out how to replace a card with its fully-healed version
     # remove a chosen card from the users hand
     def switch(self, card):
         num = 0
