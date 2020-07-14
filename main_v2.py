@@ -4,10 +4,17 @@ import json
 
 with open('monsters.json', 'r') as f:
     monsters_dict = json.load(f)
+    placeholder_dict = monsters_dict
 
 
 # contains hp of players
+def round_number():
+    Score.round_count += 1
+
+
 class Score:
+    round_count = 0
+
     def __init__(self):
         self.user_hp = 5
         self.opponent_hp = 5
@@ -15,6 +22,7 @@ class Score:
 
 class Player:
     number_of_cards = 0
+    cards_in_use = []
 
     # establishes a hand
     def __init__(self):
@@ -22,15 +30,31 @@ class Player:
 
     # draws a card for the user or opponent
     def draw(self):
-        drawn_card = random.choice(monsters_dict)
-        monsters_dict.remove(drawn_card)
+        drawn_card = random.choice(placeholder_dict)
+        Player.cards_in_use.append(drawn_card)
+        print("Current cards in use: {}".format(Player.cards_in_use))
+        placeholder_dict.remove(drawn_card)
         self.hand.append(drawn_card)
         Player.number_of_cards += 1
 
     # remove a chosen card from the users hand
     def switch(self, card):
-        monsters_dict.append(card)
+        for i in monsters_dict:
+            if i['name'] == card['name']:
+                print("placeholdering")
+                placeholder_dict.append(monsters_dict[card])
+        # monsters_dict.append(card)
         self.hand.remove(card)
+        print(placeholder_dict)
+
+    def heal_monsters(self, card):
+        print(self.hand)
+        for i in self.hand:
+            if i['name'] == card[i]['name']:
+                print("Removing and replacing card with itself")
+                self.hand.remove(card)
+                self.hand.append(monsters_dict[card])
+        print(self.hand)
 
 
 # TODO: check to see if cards are being re-added to monster dict when switching cards
@@ -183,38 +207,52 @@ def monster_attacking(user, opponent, us_monster_to_attack, op_monster_to_attack
                                                                                         opponent_hp)
             print(op_monster_to_attack)
             for i in op_card:
-                print(i['hp'])
-                if i['hp'] > 1:
+                if i['hp'] > 0:
                     op_monsters_alive = True
                     break
                 else:
                     op_monsters_alive = False
             if op_monsters_alive:
+                for i in us_card:
+                    if i['hp'] > 0:
+                        us_monsters_alive = True
+                        break
+                    else:
+                        us_monsters_alive = False
+                whose_turn = "u"
                 input("Monster alive. Continuing. Press anything.")
-            whose_turn = "u"
+
         else:
             print("Beginning users turn")
             print("Us monster to attack: {}".format(us_monster_to_attack))
             user, opponent, us_monster_to_attack, us_card, op_card = user_attacking(user, opponent,
-                                                                                    op_monster_to_attack, user_hp,
+                                                                                    us_monster_to_attack, user_hp,
                                                                                     opponent_hp)
             for i in us_card:
-                if i['hp'] > 1:
+                if i['hp'] > 0:
                     us_monsters_alive = True
                     break
                 else:
                     us_monsters_alive = False
             if us_monsters_alive:
+                for i in op_card:
+                    if i['hp'] > 0:
+                        op_monsters_alive = True
+                        break
+                    else:
+                        op_monsters_alive = False
+                whose_turn = "o"
                 input("Monster alive. Continuing. Press anything.")
-                continue
-            whose_turn = "o"
+
     else:
         if not op_monsters_alive:
             print("Opponents monsters are dead. They lose 1 HP.")
             opponent_hp -= 1
         elif not us_monsters_alive:
-            pass
-            # TODO: pick up from here
+            print("Users monsters are dead. They lose 1 HP.")
+            user_hp -= 1
+    user.heal_monsters(user)
+    opponent.heal_monsters(opponent)
     return user, opponent, whose_turn, user_hp, opponent_hp
 
 
