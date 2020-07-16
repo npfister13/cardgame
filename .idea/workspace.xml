@@ -45,7 +45,7 @@
       <recent name="C:\Users\nicholas.pfister\Documents\GitHub\cardgame" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main_v2">
+  <component name="RunManager" selected="Python.tester">
     <configuration name="Python Console (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="CardGame" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -153,8 +153,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main_v2" />
         <item itemvalue="Python.tester" />
+        <item itemvalue="Python.main_v2" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.dasd" />
         <item itemvalue="Python.Python Console (1)" />
@@ -274,28 +274,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main_v2.py</url>
-          <line>200</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main_v2.py</url>
-          <line>144</line>
+          <line>275</line>
           <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main_v2.py</url>
-          <line>226</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main_v2.py</url>
-          <line>173</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main_v2.py</url>
-          <line>236</line>
-          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

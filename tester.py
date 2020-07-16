@@ -19,6 +19,8 @@ class Score:
         self.user_hp = 5
         self.opponent_hp = 5
 
+# TODO: class Card
+
 
 class Player:
     number_of_cards = 0
