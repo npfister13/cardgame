@@ -25,8 +25,14 @@ class Player:
     cards_in_use = []
 
     # establishes a hand
+    # def __init__(self):
+    #     self.hand = []
+
     def __init__(self):
         self.hand = []
+
+    def addtohand(self, name, hp, atk):
+        self.hand.append([name, hp, atk])
 
     # draws a card for the user or opponent
     def draw(self):
@@ -49,16 +55,40 @@ class Player:
 
     def heal_monsters(self, card):
         print(self.hand)
+        num = 0
         for i in self.hand:
-            if i['name'] == card[i]['name']:
+            print("printing i value: {}".format(i))
+            print("Printing i['name']: {}".format(i['name']))
+            print("printing card: {}".format(card))
+            print("card[num] value: {}".format(card[num]))
+            if i['name'] == card[num]['name']:
                 print("Removing and replacing card with itself")
                 self.hand.remove(card)
                 self.hand.append(monsters_dict[card])
+            num += 1
         print(self.hand)
+
+
+def tester():
+    print("running test first")
+    user = Player()
+    opponent = Player()
+    user.addtohand('Aselone', 5, 3)
+    user.addtohand('Trappe', 5, 2)
+    opponent.addtohand('Grort', -1, 2)
+    opponent.addtohand('Junilet', 0, 5)
+    print(user.hand)
+    print(opponent.hand)
+    input("Press enter to continue")
+    opponent.heal_monsters(opponent.hand)
+
 
 
 # TODO: check to see if cards are being re-added to monster dict when switching cards
 def main():
+    tester()
+
+
     user = Player()
     opponent = Player()
     score = Score()
@@ -220,7 +250,7 @@ def monster_attacking(user, opponent, us_monster_to_attack, op_monster_to_attack
                     else:
                         us_monsters_alive = False
                 whose_turn = "u"
-                input("Monster alive. Continuing. Press anything.")
+                input("Monster alive. Continuing. Press anything. line 223")
 
         else:
             print("Beginning users turn")
@@ -242,7 +272,7 @@ def monster_attacking(user, opponent, us_monster_to_attack, op_monster_to_attack
                     else:
                         op_monsters_alive = False
                 whose_turn = "o"
-                input("Monster alive. Continuing. Press anything.")
+                input("Monster alive. Continuing. Press anything. line 245")
 
     else:
         if not op_monsters_alive:
