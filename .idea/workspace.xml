@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d5a85be3-c897-41a1-9273-1c97b7c2341b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/main_v3.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CardGame.iml" beforeDir="false" afterPath="$PROJECT_DIR$/CardGame.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_v2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_v3.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_v3.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +46,7 @@
       <recent name="C:\Users\nicholas.pfister\Documents\GitHub\cardgame" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.tester">
+  <component name="RunManager" selected="Python.main_v3">
     <configuration name="dasd" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="CardGame" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -157,8 +154,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.tester" />
         <item itemvalue="Python.main_v3" />
+        <item itemvalue="Python.tester" />
         <item itemvalue="Python.main_v2" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.dasd" />
@@ -179,26 +176,30 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1899" height="294" key="GridCell.Tab.0.bottom" timestamp="1607553640405">
+    <state width="1899" height="348" key="GridCell.Tab.0.bottom" timestamp="1607908768624">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="294" key="GridCell.Tab.0.bottom/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607553640405" />
-    <state width="1899" height="294" key="GridCell.Tab.0.center" timestamp="1607553640404">
+    <state width="1899" height="348" key="GridCell.Tab.0.bottom/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607908768624" />
+    <state width="1899" height="348" key="GridCell.Tab.0.center" timestamp="1607908768624">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="294" key="GridCell.Tab.0.center/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607553640404" />
-    <state width="1899" height="294" key="GridCell.Tab.0.left" timestamp="1607553640403">
+    <state width="1899" height="348" key="GridCell.Tab.0.center/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607908768624" />
+    <state width="1899" height="348" key="GridCell.Tab.0.left" timestamp="1607908768624">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="294" key="GridCell.Tab.0.left/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607553640403" />
-    <state width="1899" height="294" key="GridCell.Tab.0.right" timestamp="1607553640404">
+    <state width="1899" height="348" key="GridCell.Tab.0.left/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607908768624" />
+    <state width="1899" height="348" key="GridCell.Tab.0.right" timestamp="1607908768624">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="294" key="GridCell.Tab.0.right/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607553640404" />
+    <state width="1899" height="348" key="GridCell.Tab.0.right/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607908768624" />
     <state x="2412" y="182" key="SettingsEditor" timestamp="1607462180061">
       <screen x="1982" y="0" width="1858" height="1080" />
     </state>
     <state x="2412" y="182" key="SettingsEditor/0.0.1920.1040/1982.0.1858.1080@1982.0.1858.1080" timestamp="1607462180061" />
+    <state x="656" y="118" width="607" height="804" key="find.popup" timestamp="1607907827120">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="656" y="118" width="607" height="804" key="find.popup/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607907827120" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
