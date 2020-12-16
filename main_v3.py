@@ -12,6 +12,17 @@ class Player:
     def addCard(self, card):
         self.hand.append(card)
 
+    def healCard(self, i, card, gameDeck):
+        print(card)
+        cardName = card['name']
+        for i in range(len(gameDeck)):
+            if gameDeck[i]['name'] == cardName:
+                print("found ya boy")
+                print(gameDeck[i])
+                card['hp'] = gameDeck[i]['hp']
+        print(card)
+
+
     # def switchCard(self, card, gameDeck):
     #     gameDeck.append(card)
     #     self.__hand.remove(card)
@@ -81,6 +92,7 @@ def checkCardHealth(player, monster):
 
 # TODO 12/15 when you get back, make it to where the game continues running after first combat
 
+
 # is it possible to refer to the winner/loser as opponent/user or vice versa without making print statements
 # specifically for it?
 # nvm, i guess i could make a .name for the self init
@@ -88,6 +100,7 @@ def combatEndMessage(winner, loser):
     print("{0} wins! {1} takes one damage.".format(winner.name, loser.name))
     loser.hp -= 1
     print("{0} now has {1} hp".format(loser.name, loser.hp))
+    input("Press anything to continue.")
 
 
 def combat(user, opponent):
@@ -154,13 +167,13 @@ def combat(user, opponent):
         combatEndMessage(opponent, user)
     else:
         combatEndMessage(user, opponent)
-        # TODO: Where you left off: checking how the opponent monster attacks randomly. Need to figure out how to ignore dead monsters and continue a fight (or stop when necessary)
 
 
 def main():
     # this variable is so i can switch between testing vs a real run
-    testing = True
-
+    testing = False
+    # TODO: currently gameDeck is just another reference for monsters, meaning any changes to gameDeck changes monsters
+    # figure out how to modify gameDeck without modifying monsters
     with open('monsters.json', 'r') as f:
         monsters = json.load(f)
         gameDeck = monsters
@@ -176,9 +189,12 @@ def main():
             card = random.choice(gameDeck)
             draw(card, opponent)
             gameDeck.remove(card)
+            print(gameDeck)
+            print(monsters)
     else:
         forceAssignUser(user, gameDeck)
         forceAssignOpponent(opponent, gameDeck)
+
 
     # start game
     print("start game")
@@ -189,7 +205,11 @@ def main():
         # TODO: Implement card switching
 
         combat(user, opponent)
-        break
+        for i in range(len(user.hand)):
+            print(user.hand[i])
+            user.healCard(i, user.hand[i], gameDeck)
+        # TODO: Refill the health of cards at the end of a turn
+
 
 
 if __name__ == "__main__":
