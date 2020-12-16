@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d5a85be3-c897-41a1-9273-1c97b7c2341b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_v3.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_v3.py" afterDir="false" />
     </list>
@@ -176,22 +175,22 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1899" height="348" key="GridCell.Tab.0.bottom" timestamp="1607908768624">
+    <state width="1899" height="294" key="GridCell.Tab.0.bottom" timestamp="1608094026807">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.bottom/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607908768624" />
-    <state width="1899" height="348" key="GridCell.Tab.0.center" timestamp="1607908768624">
+    <state width="1899" height="294" key="GridCell.Tab.0.bottom/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1608094026807" />
+    <state width="1899" height="294" key="GridCell.Tab.0.center" timestamp="1608094026806">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.center/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607908768624" />
-    <state width="1899" height="348" key="GridCell.Tab.0.left" timestamp="1607908768624">
+    <state width="1899" height="294" key="GridCell.Tab.0.center/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1608094026806" />
+    <state width="1899" height="294" key="GridCell.Tab.0.left" timestamp="1608094026806">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.left/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607908768624" />
-    <state width="1899" height="348" key="GridCell.Tab.0.right" timestamp="1607908768624">
+    <state width="1899" height="294" key="GridCell.Tab.0.left/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1608094026806" />
+    <state width="1899" height="294" key="GridCell.Tab.0.right" timestamp="1608094026807">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="348" key="GridCell.Tab.0.right/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607908768624" />
+    <state width="1899" height="294" key="GridCell.Tab.0.right/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1608094026807" />
     <state x="2412" y="182" key="SettingsEditor" timestamp="1607462180061">
       <screen x="1982" y="0" width="1858" height="1080" />
     </state>
@@ -200,6 +199,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="656" y="118" width="607" height="804" key="find.popup/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1607907827120" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1608093621751">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1982.0.1858.1080@0.0.1920.1040" timestamp="1608093621751" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
