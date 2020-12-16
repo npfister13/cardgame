@@ -1,6 +1,7 @@
 import random
 import time
 import json
+import copy
 
 
 class Player:
@@ -12,20 +13,15 @@ class Player:
     def addCard(self, card):
         self.hand.append(card)
 
-    def healCard(self, i, card, gameDeck):
-        print(card)
-        cardName = card['name']
-        for i in range(len(gameDeck)):
-            if gameDeck[i]['name'] == cardName:
-                print("found ya boy")
-                print(gameDeck[i])
-                card['hp'] = gameDeck[i]['hp']
-        print(card)
+    def healCards(self, monsters):
+        for i in range(len(self.hand)):
+            for j in range(len(monsters)):
+                if self.hand[i]['name'] == monsters[j]['name']:
+                    self.hand[i]['hp'] = monsters[j]['hp']
 
-
-    # def switchCard(self, card, gameDeck):
-    #     gameDeck.append(card)
-    #     self.__hand.remove(card)
+    def removeCard(self, card, gameDeck):
+        gameDeck.append(card)
+        self.hand.remove(card)
 
 
 def draw(card, player):
@@ -43,9 +39,36 @@ def forceAssignOpponent(opponent, gameDeck):
     opponent.addCard(gameDeck[3])
 
 
-# def switch(card, player, gameDeck):
-#     draw(random.choice(gameDeck), player)
-#     player.switchCard(card, gameDeck)
+def cardSwitch(player, gameDeck):
+    print("Which card do you want to switch out?")
+    for card in player.hand:
+        print("[{}]".format(card['name']).center(15), end="")
+    print()
+    for i in range(len(player.hand)):
+        print("[{}]".format(i).center(15), end="")
+    print()
+    while True:
+        try:
+            choice = int(input("> "))
+            if choice not in range(len(player.hand)):
+                print("Selection out of range. Which card do you want to switch out?")
+            else:
+                break
+        except ValueError:
+            print("Please input a number.")
+
+    card = player.hand[choice]
+    draw(random.choice(gameDeck), player)
+    player.removeCard(card, gameDeck)
+    print("Your new hand is...\n")
+    for card in player.hand:
+        print("[{}]".format(card['name']).center(15), end="")
+    print()
+    printHand(player)
+    input("Press anything to continue.")
+
+    # player.removeCard(card)
+
 
 def printHand(cards):
     for i in cards.hand:
@@ -90,6 +113,7 @@ def checkDeckHealth(player):
 def checkCardHealth(player, monster):
     return player.hand[monster]['hp']
 
+
 # TODO 12/15 when you get back, make it to where the game continues running after first combat
 
 
@@ -113,6 +137,7 @@ def combat(user, opponent):
     # used to determine which monster is currently attacking
     userMonAtk = 0
     opponentMonAtk = 0
+    input("Press anything to continue.")
     while userAlive is not False and opponentAlive is not False:
         # TODO: turn the whole if/else statements into a function (or two) to reduce duplicate code
         if whoseTurn == "u":
@@ -138,10 +163,11 @@ def combat(user, opponent):
             userMonAtk += 1
 
         elif whoseTurn == "o":
-            if opponentMonAtk > len(opponent.hand):
-                opponentMonAtk = 0
+
             while checkDeckHealth(opponent) < 0:
                 opponentMonAtk += 1
+            if opponentMonAtk > len(opponent.hand):
+                opponentMonAtk = 0
             randUserMon = random.randint(0, len(user.hand) - 1)
             # if the chosen enemy monster is already dead, find a different one to attack
             while opponent.hand[randUserMon]['hp'] <= 0:
@@ -163,20 +189,21 @@ def combat(user, opponent):
             opponentMonAtk += 1
     if userAlive is False and opponentAlive is False:
         print("It's a draw!")
+        input("Press anything to continue.\n")
     elif userAlive is False:
         combatEndMessage(opponent, user)
     else:
         combatEndMessage(user, opponent)
+    print()
 
 
 def main():
     # this variable is so i can switch between testing vs a real run
     testing = False
-    # TODO: currently gameDeck is just another reference for monsters, meaning any changes to gameDeck changes monsters
-    # figure out how to modify gameDeck without modifying monsters
+    gameDeck = []
     with open('monsters.json', 'r') as f:
         monsters = json.load(f)
-        gameDeck = monsters
+    gameDeck = copy.deepcopy(monsters)
     cardsInUse = []
     user = Player('User')
     opponent = Player('Opponent')
@@ -195,7 +222,6 @@ def main():
         forceAssignUser(user, gameDeck)
         forceAssignOpponent(opponent, gameDeck)
 
-
     # start game
     print("start game")
     while user.hp != 0 and opponent.hp != 0:
@@ -204,12 +230,18 @@ def main():
         choice = input("> ".casefold())
         # TODO: Implement card switching
 
-        combat(user, opponent)
-        for i in range(len(user.hand)):
-            print(user.hand[i])
-            user.healCard(i, user.hand[i], gameDeck)
-        # TODO: Refill the health of cards at the end of a turn
+        if choice == "s":
+            cardSwitch(user, gameDeck)
 
+        combat(user, opponent)
+        user.healCards(monsters)
+        opponent.healCards(monsters)
+
+        # TODO: Refill the health of cards at the end of a turn
+    if opponent.hp == 0:
+        print("{0} loses! {1} is the winner!".format(opponent.name, user.name))
+    else:
+        print("{0} loses! {1} is the winner!".format(user.name, opponent.name))
 
 
 if __name__ == "__main__":
