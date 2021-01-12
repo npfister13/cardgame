@@ -114,9 +114,6 @@ def checkCardHealth(player, monster):
     return player.hand[monster]['hp']
 
 
-# TODO 12/15 when you get back, make it to where the game continues running after first combat
-
-
 # is it possible to refer to the winner/loser as opponent/user or vice versa without making print statements
 # specifically for it?
 # nvm, i guess i could make a .name for the self init
@@ -156,8 +153,6 @@ def combat(user, opponent):
             print("Your {0} attacks opponent's {1}!".format(usMonster['name'], opMonster['name']))
             opponentAlive = checkDeckHealth(opponent)
             userAlive = checkDeckHealth(user)
-            print("userAlive = {}".format(userAlive))
-            print("opponentAlive = {}".format(opponentAlive))
             input("Press anything to continue.")
             whoseTurn = "o"
             userMonAtk += 1
@@ -182,8 +177,6 @@ def combat(user, opponent):
             print("Opponent's {0} attacks your {1}!".format(opMonster['name'], usMonster['name']))
             userAlive = checkDeckHealth(user)
             opponentAlive = checkDeckHealth(opponent)
-            print("userAlive = {}".format(userAlive))
-            print("opponentAlive = {}".format(opponentAlive))
             input("Press anything to continue.")
             whoseTurn = "u"
             opponentMonAtk += 1
@@ -216,14 +209,11 @@ def main():
             card = random.choice(gameDeck)
             draw(card, opponent)
             gameDeck.remove(card)
-            print(gameDeck)
-            print(monsters)
     else:
         forceAssignUser(user, gameDeck)
         forceAssignOpponent(opponent, gameDeck)
 
     # start game
-    print("start game")
     while user.hp != 0 and opponent.hp != 0:
         printBoard(user, opponent)
         print("\nDo you want to keep your cards or switch cards? Keep = K, Switch = S")
