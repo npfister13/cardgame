@@ -3,15 +3,17 @@ import time
 import json
 import copy
 
-
+#TODO: implement opponent being more likely to switch cards after a draw/loss
 class Player:
     def __init__(self, name):
         self.hp = 5
         self.hand = []
         self.name = name
 
-    def addCard(self, card):
+    # adds a card to the players hand, removes the card from the deck
+    def addCard(self, card, gameDeck):
         self.hand.append(card)
+        gameDeck.remove(card)
 
     def healCards(self, monsters):
         for i in range(len(self.hand)):
@@ -24,19 +26,19 @@ class Player:
         self.hand.remove(card)
 
 
-def draw(card, player):
-    player.addCard(card)
+def draw(card, player, gameDeck):
+    player.addCard(card, gameDeck)
 
 
 # gives the player a specific card for testing purposes
 def forceAssignUser(user, gameDeck):
-    user.addCard(gameDeck[0])
-    user.addCard(gameDeck[1])
+    user.addCard(gameDeck[11], gameDeck)
+    user.addCard(gameDeck[12], gameDeck)
 
 
 def forceAssignOpponent(opponent, gameDeck):
-    opponent.addCard(gameDeck[2])
-    opponent.addCard(gameDeck[3])
+    opponent.addCard(gameDeck[7], gameDeck)
+    opponent.addCard(gameDeck[0], gameDeck)
 
 
 def cardSwitch(player, gameDeck):
@@ -58,7 +60,7 @@ def cardSwitch(player, gameDeck):
             print("Please input a number.")
 
     card = player.hand[choice]
-    draw(random.choice(gameDeck), player)
+    draw(random.choice(gameDeck), player, gameDeck)
     player.removeCard(card, gameDeck)
     print("Your new hand is...\n")
     for card in player.hand:
@@ -69,6 +71,35 @@ def cardSwitch(player, gameDeck):
 
     # player.removeCard(card)
 
+def opponentCardSwitch(player, gameDeck):
+    # opponent never wants to have jerry
+    for card in player.hand:
+        if card['name'] == 'Jerry':
+            draw(random.choice(gameDeck), player, gameDeck)
+            player.removeCard(card, gameDeck)
+            print("Opponent is switching cards...")
+            time.sleep(2)
+            return(player)
+    for card in player.hand:
+        if card['hp'] < 3:
+            # opponent has 1 in 5 chance of switching out a card with less than 3 hp
+            if random.randint(1, 5) == 1:
+                draw(random.choice(gameDeck), player, gameDeck)
+                player.removeCard(card, gameDeck)
+                print("Opponent is switching cards...")
+                time.sleep(2)
+                return(player)
+        elif card['str'] < 4:
+            # opponent has a 1 in 3 chance of switching out card with less than 4 str
+            if random.randint(1, 3) == 1:
+                draw(random.choice(gameDeck), player, gameDeck)
+                player.removeCard(card, gameDeck)
+                print("Opponent is switching cards...")
+                time.sleep(2)
+                return(player)
+    return(player)
+
+        
 
 def printHand(cards):
     for i in cards.hand:
@@ -111,6 +142,7 @@ def checkDeckHealth(player):
 
 
 def checkCardHealth(player, monster):
+    print("{0}, {1}".format(player.name, player.hand[monster]))
     return player.hand[monster]['hp']
 
 
@@ -138,7 +170,7 @@ def combat(user, opponent):
     while userAlive is not False and opponentAlive is not False:
         # TODO: turn the whole if/else statements into a function (or two) to reduce duplicate code
         if whoseTurn == "u":
-            if userMonAtk > len(opponent.hand):
+            if userMonAtk >= len(user.hand):
                 userMonAtk = 0
             while checkCardHealth(user, userMonAtk) <= 0:
                 userMonAtk += 1
@@ -159,14 +191,15 @@ def combat(user, opponent):
 
         elif whoseTurn == "o":
 
+            if opponentMonAtk >= len(opponent.hand):
+                opponentMonAtk = 0
             while checkDeckHealth(opponent) < 0:
                 opponentMonAtk += 1
-            if opponentMonAtk > len(opponent.hand):
-                opponentMonAtk = 0
             randUserMon = random.randint(0, len(user.hand) - 1)
             # if the chosen enemy monster is already dead, find a different one to attack
             while opponent.hand[randUserMon]['hp'] <= 0:
                 randUserMon = random.randint(0, len(user.hand) - 1)
+            print("opponentmonattk", opponentMonAtk)
             opMonster = opponent.hand[opponentMonAtk]
             usMonster = user.hand[randUserMon]
             # takes the user monster being attacked and reduces by opponent monster str
@@ -203,12 +236,10 @@ def main():
     if not testing:
         for i in range(2):
             card = random.choice(gameDeck)
-            draw(card, user)
-            gameDeck.remove(card)
+            draw(card, user, gameDeck)
 
             card = random.choice(gameDeck)
-            draw(card, opponent)
-            gameDeck.remove(card)
+            draw(card, opponent, gameDeck)
     else:
         forceAssignUser(user, gameDeck)
         forceAssignOpponent(opponent, gameDeck)
@@ -218,16 +249,16 @@ def main():
         printBoard(user, opponent)
         print("\nDo you want to keep your cards or switch cards? Keep = K, Switch = S")
         choice = input("> ".casefold())
-        # TODO: Implement card switching
 
         if choice == "s":
             cardSwitch(user, gameDeck)
+
+        opponentCardSwitch(opponent, gameDeck)
 
         combat(user, opponent)
         user.healCards(monsters)
         opponent.healCards(monsters)
 
-        # TODO: Refill the health of cards at the end of a turn
     if opponent.hp == 0:
         print("{0} loses! {1} is the winner!".format(opponent.name, user.name))
     else:
