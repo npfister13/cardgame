@@ -26,6 +26,45 @@ class Player:
         self.hand.remove(card)
 
 
+def printTavern(gameDeck):
+    #TODO implement amount of cards based on rounds
+    tavern = []
+    for i in range(0,3):
+        tavern.append(random.choice(gameDeck))
+
+    print("\n" * 15)
+    print("Tavern cards:")
+    for card in tavern:
+        # if no ability
+        if card['ability'] == '':
+            print("[{0}]: [{1}, {2}], {3}".format(card['name'], card['hp'], card['str'], card['type'].upper()), end="")
+        else:
+            # if ability 
+            if card['ability'] == 'taunt' or 'shield' or 'poison':
+                print("[{0}]: [{1}, {2}], {3} with {4}".format(card['name'], card['hp'], card['str'], 
+                card['type'].upper(), card['ability'].upper()), end="")
+            elif card['ability'] == 'frenzy':
+                print("[{0}]: [{1}, {2}], {3} with {4} (Buff teammates by {5} after surviving an attack)".format(card['name'], card['hp'], 
+                card['str'], card['type'].upper(), card['ability'].upper(), card['ability-property-amount']), end="")
+
+        print()
+    
+
+    def printBoard(user, opponent):
+        print("\n" * 15)
+        print("Opponent hp: {}".format(opponent.hp).center(30))
+        for card in opponent.hand:
+            print("[{}]".format(card['name']).center(15), end="")
+        print()
+        printHand(opponent)
+        print("-" * 30)
+        print("Your hp: {}".format(user.hp).center(30))
+        for card in user.hand:
+            print("[{}]".format(card['name']).center(15), end="")
+        print()
+        printHand(user)
+
+
 def draw(card, player, gameDeck):
     player.addCard(card, gameDeck)
 
@@ -79,7 +118,7 @@ def opponentCardSwitch(player, gameDeck):
             player.removeCard(card, gameDeck)
             print("Opponent is switching cards...")
             time.sleep(2)
-            return(player)
+            return player
     for card in player.hand:
         if card['hp'] < 3:
             # opponent has 1 in 5 chance of switching out a card with less than 3 hp
@@ -88,7 +127,7 @@ def opponentCardSwitch(player, gameDeck):
                 player.removeCard(card, gameDeck)
                 print("Opponent is switching cards...")
                 time.sleep(2)
-                return(player)
+                return player
         elif card['str'] < 4:
             # opponent has a 1 in 3 chance of switching out card with less than 4 str
             if random.randint(1, 3) == 1:
@@ -96,8 +135,8 @@ def opponentCardSwitch(player, gameDeck):
                 player.removeCard(card, gameDeck)
                 print("Opponent is switching cards...")
                 time.sleep(2)
-                return(player)
-    return(player)
+                return player
+    return player
 
         
 
@@ -222,10 +261,10 @@ def combat(user, opponent):
         combatEndMessage(user, opponent)
     print()
 
-
+#TODO: implement choosing a card from the presented pool (tavern)
 def main():
     # this variable is so i can switch between testing vs a real run
-    testing = False
+    testing = True
     gameDeck = []
     with open('monsters.json', 'r') as f:
         monsters = json.load(f)
@@ -241,8 +280,28 @@ def main():
             card = random.choice(gameDeck)
             draw(card, opponent, gameDeck)
     else:
-        forceAssignUser(user, gameDeck)
-        forceAssignOpponent(opponent, gameDeck)
+        # force assigning cards to user and opponent to check interactions
+        # forceAssignUser(user, gameDeck)
+        # forceAssignOpponent(opponent, gameDeck)
+        while user.hp != 0 and opponent.hp != 0:
+            printTavern(gameDeck)
+            printBoard(user, opponent)
+            print("\nDo you want to keep your cards or switch cards? Keep = K, Switch = S")
+            choice = input("> ".casefold())
+
+            if choice == "s":
+                cardSwitch(user, gameDeck)
+
+            opponentCardSwitch(opponent, gameDeck)
+
+            combat(user, opponent)
+            user.healCards(monsters)
+            opponent.healCards(monsters)
+
+    if opponent.hp == 0:
+        print("{0} loses! {1} is the winner!".format(opponent.name, user.name))
+    else:
+        print("{0} loses! {1} is the winner!".format(user.name, opponent.name))
 
     # start game
     while user.hp != 0 and opponent.hp != 0:
