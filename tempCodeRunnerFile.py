@@ -1,1 +1,1 @@
-
+copy.deepcopy(card)
