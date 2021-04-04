@@ -133,6 +133,6 @@
     "amount": 10,
     "ability": "windfury",
     "ability-property":"extraTurn",
-    "ability-property-amount":"1"
+    "ability-property-amount":1
   }
 ]

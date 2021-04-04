@@ -1,1 +1,2 @@
-copy.deepcopy(card)
+
+        if receivingCard['ability'] == 'poison':

@@ -82,16 +82,16 @@ def draw(card, player, gameDeck):
 
 # gives the player a specific card for testing purposes
 def forceAssignUser(user, gameDeck):
-    card = gameDeck[7]
+    card = gameDeck[6]
     user.addCard(card, gameDeck)
-    card = gameDeck[5]
+    card = gameDeck[7]
     user.addCard(card, gameDeck)
     
 
 def forceAssignOpponent(opponent, gameDeck):
-    card = gameDeck[8]
+    card = gameDeck[13]
     opponent.addCard(card, gameDeck)
-    card = gameDeck[14]
+    card = gameDeck[7]
     opponent.addCard(card, gameDeck)
 
 
@@ -177,8 +177,8 @@ def printBoard(user, opponent):
 
 
 def determineFirst():
-    # first = "u"
-    first = random.choice(["o", "u"])
+    first = "o"
+    # first = random.choice(["o", "u"])
     if first == "o":
         print("Opponent goes first!")
         return "o"
@@ -207,10 +207,13 @@ def checkAbility(attackingCard, receivingCard):
     if attackingCard['ability'] == 'shield':
         if receivingCard['ability'] == 'shield':
             #if they both have shield, damage is ignored for both
+            print("both shield if statement")
             return attackingCard, receivingCard
         else:
             #if attacker has shield, only receivingCard takes damage
+            print("only attacker has shield")
             receivingCard['hp'] -= attackingCard['str']
+            return attackingCard, receivingCard
     elif attackingCard['ability'] == 'poison':
         if receivingCard['ability'] == 'poison':
             #both cards insta die
@@ -220,12 +223,18 @@ def checkAbility(attackingCard, receivingCard):
         elif receivingCard['ability'] == 'shield':
             # receiving card lives due to shield, attacker takes damage
             attackingCard['hp'] -= receivingCard['str']
+            print("attacking card takes damage, receiver does not")
             return attackingCard, receivingCard
         else:
             #attacker takes damage, receiver insta dies
             attackingCard['hp'] -= receivingCard['str']
             receivingCard['hp'] = 0
+            print('else att/rec')
             return attackingCard, receivingCard
+    elif receivingCard['ability'] == 'poison':
+        receivingCard['hp'] -= attackingCard['str']
+        attackingCard['hp'] = 0
+        return attackingCard, receivingCard
     receivingCard['hp'] -= attackingCard['str'] #when attacking or being attacked, take damage
     attackingCard['hp'] -= receivingCard['str']
     return attackingCard, receivingCard
@@ -240,6 +249,55 @@ def combatEndMessage(winner, loser):
     loser.hp -= 1
     print("{0} now has {1} hp".format(loser.name, loser.hp))
     input("Press anything to continue.")
+
+def interactionCalculation(attacker, receiver, attackerMonAtk, whoseTurn, attackerAlive, receiverAlive):
+    while checkCardHealth(attacker, attackerMonAtk) <= 0:
+        #use next monster if current is dead
+        attackerMonAtk += 1
+    if attackerMonAtk >= len(attacker.hand):
+        #what monster will attack
+        attackerMonAtk = 0
+    #choose a random target
+    randOpponentMon = random.randint(0, len(attacker.hand) - 1)
+    while receiver.hand[randOpponentMon]['hp'] <= 0:
+        #reroll if chosen enemy dead
+        randOpponentMon = random.randint(0, len(attacker.hand) - 1)
+    attackerMonster = attacker.hand[attackerMonAtk] #store the card info
+    receiverMonster = receiver.hand[randOpponentMon]
+    # move damage calculations to checkAbility so that damage/hp modifiers can be done more easily
+    attackerMonster, receiverMonster = checkAbility(attackerMonster, receiverMonster)
+    if whoseTurn == "u":
+        printBoard(attacker, receiver)
+    else:
+        printBoard(receiver, attacker)
+    print("{0}'s {1} attacks {2}'s {3}!".format(attacker.name, attackerMonster['name'], receiver.name, receiverMonster['name']))
+    receiverAlive = checkDeckHealth(receiver)
+    attackerAlive = checkDeckHealth(attacker)
+    input("Press anything to continue.")
+    if attackerMonster['ability'] == 'windfury' and attackerMonster['hp'] > 0 and receiverAlive == True and attackerAlive == True:
+        print("if windfury")
+        for i in range(0, attackerMonster['ability-property-amount']):
+            print("for loop")
+            randOpponentMon = random.randint(0, len(attacker.hand) - 1)
+            while receiver.hand[randOpponentMon]['hp'] <= 0:
+                #reroll if chosen enemy dead
+                randOpponentMon = random.randint(0, len(attacker.hand) - 1)
+            attackerMonster = attacker.hand[attackerMonAtk] #store the card info
+            receiverMonster = receiver.hand[randOpponentMon]
+            # move damage calculations to checkAbility so that damage/hp modifiers can be done more easily
+            attackerMonster, receiverMonster = checkAbility(attackerMonster, receiverMonster)
+            if whoseTurn == "u":
+                printBoard(attacker, receiver)
+            else:
+                printBoard(receiver, attacker)
+            print("{0}'s {1} attacks {2}'s {3}!".format(attacker.name, attackerMonster['name'], receiver.name, receiverMonster['name']))
+            receiverAlive = checkDeckHealth(receiver)
+            attackerAlive = checkDeckHealth(attacker)
+            input("Press anything to continue.")
+    attackerMonAtk += 1
+    # print("{0} is alive = {1}".format(attacker.name, attackerAlive))
+    # print("{0} is alive = {1}".format(receiver.name, receiverAlive))
+    return attacker, receiver, attackerMonAtk, attackerAlive, receiverAlive
 
 
 def combat(user, opponent):
@@ -258,56 +316,15 @@ def combat(user, opponent):
         # TODO: add check to see if any opponent cards has taunt
         # TODO: add check to see if attacking card has windfury
         if whoseTurn == "u":
-            while checkCardHealth(user, userMonAtk) <= 0:
-                #use next monster if current is dead
-                userMonAtk += 1
-            if userMonAtk >= len(user.hand):
-                #what monster will attack
-                userMonAtk = 0
-            #choose a random target
-            randOpponentMon = random.randint(0, len(user.hand) - 1)
-            while opponent.hand[randOpponentMon]['hp'] <= 0:
-                #reroll if chosen enemy dead
-                randOpponentMon = random.randint(0, len(user.hand) - 1)
-            usMonster = user.hand[userMonAtk] #store the card info
-            opMonster = opponent.hand[randOpponentMon]
-            # move damage calculations to checkAbility so that damage/hp modifiers can be done more easily
-            usMonster, opMonster = checkAbility(usMonster, opMonster)
-            printBoard(user, opponent)
-            print("Your {0} attacks opponent's {1}!".format(usMonster['name'], opMonster['name']))
-            opponentAlive = checkDeckHealth(opponent)
-            userAlive = checkDeckHealth(user)
-            if usMonster['ability'] == 'windfury':
-                randOpponentMon = random.randint(0, len(user.hand) - 1)
-
-            input("Press anything to continue.")
+            print("")
+            user, opponent, userMonAtk, userAlive, opponentAlive = interactionCalculation(user, opponent, userMonAtk, whoseTurn, userAlive, opponentAlive)
             whoseTurn = "o"
-            userMonAtk += 1
-
+       
         elif whoseTurn == "o":
-
-            while checkCardHealth(opponent, opponentMonAtk) <= 0:
-                #use next monster if current is dead
-                opponentMonAtk += 1
-            if opponentMonAtk >= len(opponent.hand):
-                opponentMonAtk = 0
-            randUserMon = random.randint(0, len(user.hand) - 1)
-            # if the chosen enemy monster is already dead, find a different one to attack
-            while user.hand[randUserMon]['hp'] <= 0:
-                randUserMon = random.randint(0, len(user.hand) - 1)
-                print("opponent while loop for choosing target")
-            # print("opponentmonattk", opponentMonAtk)
-            opMonster = opponent.hand[opponentMonAtk]
-            usMonster = user.hand[randUserMon]
-            # move damage calculations to checkAbility so that damage/hp modifiers can be done more easily
-            usMonster, opMonster = checkAbility(usMonster, opMonster)
-            printBoard(user, opponent)
-            print("Opponent's {0} attacks your {1}!".format(opMonster['name'], usMonster['name']))
-            userAlive = checkDeckHealth(user)
-            opponentAlive = checkDeckHealth(opponent)
-            input("Press anything to continue.")
+            print("")
+            opponent, user, opponentMonAtk, opponentAlive, userAlive = interactionCalculation(opponent, user, opponentMonAtk, whoseTurn, opponentAlive, userAlive)
             whoseTurn = "u"
-            opponentMonAtk += 1
+
     if userAlive is False and opponentAlive is False:
         print("It's a draw!")
         input("Press anything to continue.\n")
