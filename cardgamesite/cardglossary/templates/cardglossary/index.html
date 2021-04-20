@@ -1,0 +1,94 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'cardglossary/style.css' %}">
+
+{% comment %} {% if latest_question_list %}
+    {% comment %} <ul>
+    {% for question in latest_question_list %}
+        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+    {% endfor %}
+    </ul> {% endcomment %}
+{% comment %} {% else %} {% endcomment %}
+ 
+{% comment %} {% endif %} {% endcomment %}
+<head>
+    <meta charset="UTF-8">
+    <title>Monster Cards</title>
+
+    <!-- INCLUDING JQUERY -->
+    <script src= "https://code.jquery.com/jquery-3.5.1.js">
+    </script>
+
+    <!-- CSS FOR STYLING THE PAGE -->
+    <style>
+        table { 
+            margin: 20;
+            font-size: large;
+        }
+
+        table.center{
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #006600;
+            font-size: xx-large;
+            font-family: 'Gill Sans',
+                'Gill Sans MT', 'Calibri',
+                'Trebuchet MS', 'sans-serif';
+        }
+
+        td {
+            background-color: #FFFFFF;
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            font-weight: bold;
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+
+        td {
+            font-weight: lighter;
+        }
+    </style>
+</head>
+
+<body>
+    {% if d %}
+    <table>
+        {% for k in d %}
+        {% for item_1, item_2 in k.items %}
+        <tr>
+            <td>{{ item_1 }}</td>
+            <td>{{ item_2 }}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+<body>
+
+</body>
+{% comment %} 
+
+<table style="width:1000" class="center">
+    <tr>
+        <th>Name</th>
+        <th>HP</th>
+        <th>STR</th>
+        <th>Ability</th>
+    </tr>
+    <tr>
+        <td>Jerry</td>
+        <td>1</td>
+        <td>1</td>
+        <td>None</td>
+    </tr>
+</table> {% endcomment %}
