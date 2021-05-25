@@ -20,3 +20,4 @@ class Card:
             if self.abilityProperty != "":
                 print("Ability properties:", self.abilityProperty.upper())
                 print("Ability properties amount:", self.abilityPropertyAmount)
+        print()

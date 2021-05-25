@@ -6,60 +6,78 @@ import copy
 import player
 import card
 import tavern
-import fake
 
 # TODO: implement opponent being more likely to switch cards after a draw/loss
 # TODO: implement option select at beginning of rounds: Buy, Sell, End Turn
 
 
-def printTavern(gameDeck):
-    # TODO implement amount of cards based on rounds
-    tavern = []
-    for i in range(0, 3):
-        rando = random.choice(gameDeck)
-        while rando.amount == 0:
-            rando = random.choice(gameDeck)
-        rando.amount -= 1
-        tavern.append(rando)
 
-    print("\n" * 15)
-    print("Tavern cards:")
-    i = 0
-    for card in tavern:
-        # if no ability
-        # if card.ability == '':
-        # [choice num] [cardname]: [hp, str], TYPE
-        print("[{0}] [{1}]: [{2}, {3}], {4}".format(i, card.name, card.hp, card.str, card.type.upper()),
-              end="")
-        # if ability 
-        if card.ability == 'taunt' or card.ability == 'shield' or card.ability == 'poison':
-            # [choice num] [cardname]: [hp, str], TYPE (with) ABILITY
-            print(" with {}".format(card.ability.upper()), end="")
-        elif card.ability == 'frenzy':
-            print(" with {0} (Buff teammates by {1} after surviving an attack)".format(card.ability.upper(),
-                                                                                       card.abilityPropertyAmount),
-                  end="")
-        # elif card.ability == 
-        i += 1
-        print()
-    print()
-    return tavern
+def chooseTavern(player, tavernCards, Tavern, gameDeck, Card):
+    print("Choose the cards you would like. Each costs three (3) gold.\nEnd turn with E. Sell cards with S. Refresh tavern for one (1) gold with R.")
+    print("Freeze cards for next turn with F.\nChange card order with C.")
+    # theres gotta be a better way to do this
+    inputList = ['E', 'S', 'C', 'R', 'F']
+    while True:
+        print("Gold total:", player.gold)
+        while True:
+            try:
+                choice = input("> ")
+                if int(choice) not in range(len(tavernCards)):
+                    print("Selection out of range.")
+                else:
+                    break
+            except ValueError:
+                if choice not in inputList:
+                    print("Please choose a valid option.")
+                else:
+                    break
+        if choice.isnumeric() is True:
+            if int(choice) in range(len(tavernCards)) and player.gold < 3: 
+                print("You do not have enough gold.")
+            else:
+                index = tavernCards[int(choice)]
+                player.addCard(index)
+                player.gold -= 3
+                Tavern.removeCardFromTavern(int(choice))
+                Tavern.printTavern()
+        if choice == 'E':
+            print("Ending turn.")
+            break
+        elif choice == 'S':
+            if player.hand == []:
+                print("You have no cards to sell!")
+            else:
+                playerSellCard(player, tavernCards, Tavern, gameDeck, Card)
+        elif choice == 'R':
+            Tavern.enableTavern(gameDeck)
+            player.removeGold(1)
+        elif choice == 'F':
+            Tavern.freezeCards = True
+                
 
+        
+    
 
-def chooseTavern(player, tavern, gameDeck):
-    print("Which card would you like? Pick one.")
+def checkPlayerInput(choice):
+    if choice == 'E':
+        pass
+
+def playerSellCard(player, tavernCards, Tavern, gameDeck, Card):
+    print("Which card would you like to sell?\n")
+    for i in range(len(player.hand)):
+        print("[{}]".format(i))
+        Card.printCardStats(player.hand[i])
     while True:
         try:
             choice = int(input("> "))
-            if choice not in range(len(tavern)):
-                print("Selection out of range. Which card do you want?")
+            if choice not in range(len(tavernCards)):
+                print("Selection out of range.")
             else:
                 break
         except ValueError:
             print("Please input a number.")
-    index = tavern[choice]
-    player.addCard(index)
-
+    player.removeCard(player.hand[choice], gameDeck)
+    player.addGold(1)
 
 def draw(card, player, gameDeck):
     player.addCard(card)
@@ -69,7 +87,7 @@ def draw(card, player, gameDeck):
 def forceAssignUser(user, gameDeck):
     card = gameDeck[8]
     user.addCard(card)
-    card = gameDeck[9]
+    card = gameDeck[8]
     user.addCard(card)
     
 
@@ -77,9 +95,9 @@ def forceAssignUser(user, gameDeck):
 def forceAssignOpponent(opponent, gameDeck):
     card = gameDeck[10]
     opponent.addCard(card)
-    card = gameDeck[11]
+    card = gameDeck[10]
     opponent.addCard(card)
-    card = gameDeck[14]
+    card = gameDeck[10]
     opponent.addCard(card)
 
 
@@ -247,7 +265,13 @@ def interactionCalculation(attacker, receiver, attackerMonAtk, whoseTurn, attack
         # what monster will attack
         attackerMonAtk = 0
     # choose a random target
-    randOpponentMon = random.randint(0, len(receiver.hand) - 1)
+    try:
+        randOpponentMon = random.randint(0, len(receiver.hand) - 1)
+    except ValueError:
+        # This error will come up if the receiver (likely the user) has no cards on the field
+        receiverAlive = False
+        return attacker, receiver, attackerMonAtk, attackerAlive, receiverAlive
+        
     print(randOpponentMon)
     while receiver.hand[randOpponentMon].hp <= 0:
         # reroll if chosen enemy dead
@@ -349,47 +373,37 @@ def main():
     cardsInUse = []
     user = Player('User')
     opponent = Player('Opponent')
-    rounds = 1
     if not testing:
         while user.hp != 0 and opponent.hp != 0:
-            # tavern = printTavern(gameDeck)
-            Tavern.printTavern(gameDeck)
-            chooseTavern(user, Tavern.tavernCards, gameDeck)
+            print(Tavern.round)
+            Tavern.enableTavern(gameDeck)
+            chooseTavern(user, Tavern.tavernCards, Tavern, gameDeck, Card)
             draw(random.choice(gameDeck), opponent, gameDeck)
             printBoard(user, opponent)
-            # if rounds > 1:
-            #     print("\nDo you want to keep your cards or switch cards? Keep = K, Switch = S")
-            #     choice = input("> ".casefold())
-
-            #     if choice == "s":
-            #         cardSwitch(user, gameDeck)
-            #     opponentCardSwitch(opponent, gameDeck)
             input("Press anything to continue.")
             combat(user, opponent)
             user.healCards(monsters)
             opponent.healCards(monsters)
-            rounds += 1
+            Tavern.round += 1
+            user.setGold(Tavern.round)
+
     else:
         # force assigning cards to user and opponent to check interactions
         forceAssignUser(user, gameDeck)
         forceAssignOpponent(opponent, gameDeck)
+        
         while user.hp != 0 and opponent.hp != 0:
-            # tavern = printTavern(gameDeck)
             # chooseTavern(user, tavern, gameDeck)
             # draw(random.choice(gameDeck), opponent, gameDeck)
+            Tavern.enableTavern(gameDeck)
+            chooseTavern(user, Tavern.tavernCards, Tavern, gameDeck, Card)
             printBoard(user, opponent)
-            # if rounds > 1:
-            #     print("\nDo you want to keep your cards or switch cards? Keep = K, Switch = S")
-            #     choice = input("> ".casefold())
-
-            #     if choice == "s":
-            #         cardSwitch(user, gameDeck)
-            #     opponentCardSwitch(opponent, gameDeck)
             input("Press anything to continue.")
             combat(user, opponent)
             user.healCards(monsters)
             opponent.healCards(monsters)
-            rounds += 1
+            Tavern.round += 1
+            Tavern.adjustTavernCost()
 
     # start game
     while user.hp != 0 and opponent.hp != 0:
