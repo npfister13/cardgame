@@ -15,8 +15,9 @@ import tavern
 def chooseTavern(player, tavernCards, Tavern, gameDeck, Card):
     print("Choose the cards you would like. Each costs three (3) gold.\nEnd turn with E. Sell cards with S. Refresh tavern for one (1) gold with R.")
     print("Freeze cards for next turn with F.\nChange card order with C.")
+    print("View your hand with V. Upgrade tiers with U.")
     # theres gotta be a better way to do this
-    inputList = ['E', 'S', 'C', 'R', 'F']
+    inputList = ['E', 'S', 'C', 'R', 'F', 'V', 'U']
     while True:
         print("Gold total:", player.gold)
         while True:
@@ -53,10 +54,16 @@ def chooseTavern(player, tavernCards, Tavern, gameDeck, Card):
             player.removeGold(1)
         elif choice == 'F':
             Tavern.freezeCards = True
+        elif choice == 'V':
+            pass
+        elif choice == 'U':
+            if player.gold < Tavern.tavernCost:
+                print("You don't have enough gold to upgrade the tavern.")
+            else:
+                player.removeGold(Tavern.tavernCost)
+                Tavern.increaseTavernTier()
                 
-
-        
-    
+                
 
 def checkPlayerInput(choice):
     if choice == 'E':
@@ -85,9 +92,9 @@ def draw(card, player, gameDeck):
 
 # gives the player a specific card for testing purposes
 def forceAssignUser(user, gameDeck):
-    card = gameDeck[8]
+    card = gameDeck[3]
     user.addCard(card)
-    card = gameDeck[8]
+    card = gameDeck[7]
     user.addCard(card)
     
 
@@ -95,9 +102,9 @@ def forceAssignUser(user, gameDeck):
 def forceAssignOpponent(opponent, gameDeck):
     card = gameDeck[10]
     opponent.addCard(card)
-    card = gameDeck[10]
+    card = gameDeck[5]
     opponent.addCard(card)
-    card = gameDeck[10]
+    card = gameDeck[9]
     opponent.addCard(card)
 
 
@@ -183,8 +190,8 @@ def printBoard(user, opponent):
 
 
 def determineFirst():
-    # first = "o"
-    first = random.choice(["o", "u"])
+    first = "o"
+    # first = random.choice(["o", "u"])
     if first == "o":
         print("Opponent goes first!")
         return "o"
@@ -202,14 +209,13 @@ def checkDeckHealth(player):
 
 
 def checkCardHealth(player, monster):
-    # print("this is the monster:", monster)
+    print("monster value", monster)
     if monster >= len(player.hand):
         monster = 0
-    #     print("monster value out of range, changing to 0")
-    # print("{0}, {1}".format(player.name, player.hand[monster]))
+    print("checkCardHealth return value", player.hand[monster].hp)
     return player.hand[monster].hp
 
-
+# TODO: add to all monster cards something along the lines of hasShield? (T/F) and have a way to remove shield after damage occurs
 def checkAbility(attackingCard, receivingCard):
     if attackingCard.ability == 'shield':
         if receivingCard.ability == 'shield':
@@ -221,6 +227,10 @@ def checkAbility(attackingCard, receivingCard):
             print("only attacker has shield")
             receivingCard.hp -= attackingCard.str
             return attackingCard, receivingCard
+    elif receivingCard.ability == 'shield':
+        print("only receiver has shield")
+        attackingCard.hp -= receivingCard.str
+        return attackingCard, receivingCard
     elif attackingCard.ability == 'poison':
         if receivingCard.ability == 'poison':
             # both cards insta die
@@ -260,10 +270,12 @@ def combatEndMessage(winner, loser):
 def interactionCalculation(attacker, receiver, attackerMonAtk, whoseTurn, attackerAlive, receiverAlive):
     while checkCardHealth(attacker, attackerMonAtk) <= 0:
         # use next monster if current is dead
+        print("interactionCalc checkCardHealth while loop")
+        print("attackerMonAtk", attackerMonAtk)
         attackerMonAtk += 1
-    if attackerMonAtk >= len(attacker.hand):
-        # what monster will attack
-        attackerMonAtk = 0
+        if attackerMonAtk >= len(attacker.hand):
+            # what monster will attack
+            attackerMonAtk = 0
     # choose a random target
     try:
         randOpponentMon = random.randint(0, len(receiver.hand) - 1)
@@ -359,7 +371,7 @@ def combat(user, opponent):
 # TODO: implement choosing a card from the presented pool (tavern)
 def main():
     # this variable is so i can switch between testing vs a real run
-    testing = False
+    testing = True
     Card = card.Card
     Player = player.Player
     Tavern = tavern.Tavern()
@@ -386,6 +398,7 @@ def main():
             opponent.healCards(monsters)
             Tavern.round += 1
             user.setGold(Tavern.round)
+            Tavern.reduceCost()
 
     else:
         # force assigning cards to user and opponent to check interactions
@@ -403,7 +416,7 @@ def main():
             user.healCards(monsters)
             opponent.healCards(monsters)
             Tavern.round += 1
-            Tavern.adjustTavernCost()
+            Tavern.reduceCost()
 
     # start game
     while user.hp != 0 and opponent.hp != 0:

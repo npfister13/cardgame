@@ -5,11 +5,12 @@ class Tavern:
         self.round = 0
         # sellables are the amount of cards that can be sold at once during the round
         self.sellables = 3
-        self.tier = 0
+        self.tier = 1
         self.tavernCards = []
-        self.tavernCost = 0
+        self.tavernStartCost = {1: 5, 2: 7, 3: 8, 4: 9, 5: 10}
+        self.tavernCost = 5
         # {round number: card amount}
-        self.tavernCardAmount = {0: 3, 1: 4, 2: 4, 3: 5, 4: 5, 5: 6}
+        self.tavernCardAmount = {1: 3, 2: 4, 3: 4, 4: 5, 5: 5, 6: 6}
         self.freezeCards = False
 
     def enableTavern(self, gameDeck):
@@ -22,7 +23,6 @@ class Tavern:
                 rando.amount -= 1
                 self.tavernCards.append(rando)
         elif self.freezeCards == True and len(self.tavernCards) < self.tavernCardAmount[self.tier]:
-            print("oh shit yo its not mastchingsdhj")
             while len(self.tavernCards) < self.tavernCardAmount[self.tier]:
                 print("Amount of cards currently in tavern:", len(self.tavernCards))
                 print("Amount of cards there should currently be:", self.tavernCardAmount[self.tier])
@@ -36,6 +36,8 @@ class Tavern:
         # return tavern
     
     def printTavern(self):
+        print("Tavern tier:",self.tier)
+        print("Tavern upgrade cost:",self.tavernCost)
         print("Tavern cards:")
         i = 0
         for card in self.tavernCards:
@@ -57,9 +59,13 @@ class Tavern:
             i += 1
         print()
 
-    def adjustTavernCost(self):
-        print(self.tavernCardAmount[self.tier])
+    def reduceCost(self):
+        if self.tavernCost > 0:
+            self.tavernCost -= 1
+
+    def increaseTavernTier(self):
         self.tier += 1
+        self.tavernCost = self.tavernStartCost[self.tier]
     
     def removeCardFromTavern(self, choice):
         self.tavernCards.pop(choice)
