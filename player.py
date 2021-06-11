@@ -1,12 +1,22 @@
 import copy
+import card
+from dataclasses import dataclass
+from typing import List
 
+@dataclass
 class Player:
-    def __init__(self, name):
-        self.hp = 5
-        self.hand = []
-        self.name = name
-        self.gold = 3
-        self.goldMax = 10
+    # def __init__(self, name):
+    #     self.hp = 5
+    #     self.hand = []
+    #     self.name = name
+    #     self.gold = 3
+    #     self.goldMax = 10
+    name: str
+    hand: List[card.Card]
+    hp = 5
+    gold = 3
+    goldMax = 10
+
 
     # adds a card to the players hand, removes the card from the deck
     def addCard(self, card):

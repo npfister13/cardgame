@@ -50,8 +50,8 @@
     "type": "sorcerer",
     "amount": 10,
     "ability": "shield",
-    "ability-property":"",
-    "ability-property-amount":""
+    "ability-property":"invulnerable",
+    "ability-property-amount":1
   },
   { "name": "Trappe",
     "hp": 5,

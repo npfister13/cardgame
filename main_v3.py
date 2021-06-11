@@ -12,7 +12,7 @@ import tavern
 
 
 
-def chooseTavern(player, tavernCards, Tavern, gameDeck, Card):
+def chooseTavern(player, tavernCards, tavernObj, gameDeck, cardObj):
     print("Choose the cards you would like. Each costs three (3) gold.\nEnd turn with E. Sell cards with S. Refresh tavern for one (1) gold with R.")
     print("Freeze cards for next turn with F.\nChange card order with C.")
     print("View your hand with V. Upgrade tiers with U.")
@@ -39,8 +39,8 @@ def chooseTavern(player, tavernCards, Tavern, gameDeck, Card):
                 index = tavernCards[int(choice)]
                 player.addCard(index)
                 player.gold -= 3
-                Tavern.removeCardFromTavern(int(choice))
-                Tavern.printTavern()
+                tavernObj.removeCardFromTavern(int(choice))
+                tavernObj.printTavern()
         if choice == 'E':
             print("Ending turn.")
             break
@@ -48,32 +48,39 @@ def chooseTavern(player, tavernCards, Tavern, gameDeck, Card):
             if player.hand == []:
                 print("You have no cards to sell!")
             else:
-                playerSellCard(player, tavernCards, Tavern, gameDeck, Card)
+                playerSellCard(player, tavernCards, tavernObj, gameDeck, cardObj)
         elif choice == 'R':
-            Tavern.enableTavern(gameDeck)
+            tavernObj.enableTavern(gameDeck)
             player.removeGold(1)
         elif choice == 'F':
-            Tavern.freezeCards = True
+            if tavernObj.freezeCards == False:
+                print("Cards frozen.")
+                tavernObj.freezeCards = True
+            else:
+                print(tavernObj.freezeCards)
+                print("Card unfrozen.")
+                tavernObj.freezeCards = False
         elif choice == 'V':
             pass
         elif choice == 'U':
-            if player.gold < Tavern.tavernCost:
+            if player.gold < tavernObj.tavernCost:
                 print("You don't have enough gold to upgrade the tavern.")
             else:
-                player.removeGold(Tavern.tavernCost)
-                Tavern.increaseTavernTier()
+                player.removeGold(tavernObj.tavernCost)
+                tavernObj.increaseTavernTier()
                 
                 
 
-def checkPlayerInput(choice):
+def checkplayerObjInput(choice):
     if choice == 'E':
         pass
 
-def playerSellCard(player, tavernCards, Tavern, gameDeck, Card):
+def playerSellCard(player, tavernCards, tavernObj, gameDeck, cardObj):
     print("Which card would you like to sell?\n")
     for i in range(len(player.hand)):
         print("[{}]".format(i))
-        Card.printCardStats(player.hand[i])
+        # cardObj.printCardStats(player.hand[i])
+        print(player.hand[i])
     while True:
         try:
             choice = int(input("> "))
@@ -221,15 +228,31 @@ def checkAbility(attackingCard, receivingCard):
         if receivingCard.ability == 'shield':
             # if they both have shield, damage is ignored for both
             print("both shield if statement")
+            if attackingCard.abilityPropertyAmount == 0:
+                attackingCard.hp -= receivingCard.str
+                receivingCard.abilityPropertyAmount -= 1
+            elif attackingCard.abilityPropertyAmount == 0 and receivingCard.abilityPropertyAmount == 0:
+                receivingCard.hp -= attackingCard.str  # when attacking or being attacked, take damage
+                attackingCard.hp -= receivingCard.str
+                attackingCard.abilityPropertyAmount -= 1
+                receivingCard.abilityPropertyAmount -= 1
+            elif receivingCard.abilityPropertyAmount == 0:
+                receivingCard.hp -= attackingCard.str
             return attackingCard, receivingCard
         else:
             # if attacker has shield, only receivingCard takes damage
             print("only attacker has shield")
             receivingCard.hp -= attackingCard.str
+            attackingCard.abilityPropertyAmount -= 1
             return attackingCard, receivingCard
     elif receivingCard.ability == 'shield':
         print("only receiver has shield")
-        attackingCard.hp -= receivingCard.str
+        if receivingCard.abilityPropertyAmount == 0:
+            receivingCard.hp -= attackingCard.str 
+            attackingCard.hp -= receivingCard.str
+        else:
+            receivingCard.hp -= attackingCard.str
+            receivingCard.abilityPropertyAmount -= 1
         return attackingCard, receivingCard
     elif attackingCard.ability == 'poison':
         if receivingCard.ability == 'poison':
@@ -371,34 +394,35 @@ def combat(user, opponent):
 # TODO: implement choosing a card from the presented pool (tavern)
 def main():
     # this variable is so i can switch between testing vs a real run
-    testing = True
-    Card = card.Card
-    Player = player.Player
-    Tavern = tavern.Tavern()
+    testing = False
+    cardObj = card.Card
+    playerObj = player.Player
+    tavernObj = tavern.Tavern()
 
     with open('monsters.json', 'r') as f:
         monsters = json.load(f)
     gameDeck = []
     for i in range(len(monsters)):
-        gameDeck.append(Card(monsters[i]))
+        gameDeck.append(cardObj(monsters[i]))
 
     cardsInUse = []
-    user = Player('User')
-    opponent = Player('Opponent')
+    user = playerObj(name = 'User', hand=[])
+    opponent = playerObj(name = 'Opponent', hand=[])
     if not testing:
         while user.hp != 0 and opponent.hp != 0:
-            print(Tavern.round)
-            Tavern.enableTavern(gameDeck)
-            chooseTavern(user, Tavern.tavernCards, Tavern, gameDeck, Card)
+            print(tavernObj.round)
+            tavernObj.enableTavern(gameDeck)
+            tavernObj.freezeCards = False
+            chooseTavern(user, tavernObj.tavernCards, tavernObj, gameDeck, cardObj)
             draw(random.choice(gameDeck), opponent, gameDeck)
             printBoard(user, opponent)
             input("Press anything to continue.")
             combat(user, opponent)
             user.healCards(monsters)
             opponent.healCards(monsters)
-            Tavern.round += 1
-            user.setGold(Tavern.round)
-            Tavern.reduceCost()
+            tavernObj.round += 1
+            user.setGold(tavernObj.round)
+            tavernObj.reduceCost()
 
     else:
         # force assigning cards to user and opponent to check interactions
@@ -408,15 +432,15 @@ def main():
         while user.hp != 0 and opponent.hp != 0:
             # chooseTavern(user, tavern, gameDeck)
             # draw(random.choice(gameDeck), opponent, gameDeck)
-            Tavern.enableTavern(gameDeck)
-            chooseTavern(user, Tavern.tavernCards, Tavern, gameDeck, Card)
+            tavernObj.enableTavern(gameDeck)
+            chooseTavern(user, tavernObj.tavernCards, tavernObj, gameDeck, cardObj)
             printBoard(user, opponent)
             input("Press anything to continue.")
             combat(user, opponent)
             user.healCards(monsters)
             opponent.healCards(monsters)
-            Tavern.round += 1
-            Tavern.reduceCost()
+            tavernObj.round += 1
+            tavernObj.reduceCost()
 
     # start game
     while user.hp != 0 and opponent.hp != 0:
