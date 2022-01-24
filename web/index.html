@@ -1,0 +1,41 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Cardgame</title>
+    <meta name="description" content="Cardgame">
+    <meta name="author" content="">
+
+    <link rel="stylesheet" href="src/styles.css?v=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <script src="./src/cardgame.js"></script>
+    <header>
+      <h1>Cardgame</h1>
+      <button onclick="reset()">Start/Restart</button>
+      <button onclick="dealCards()">Deal Cards</button>
+    </header>
+    <main>
+      <div class="interface">
+        <div class="board">
+
+          <div id="player-two" class="player player-top">
+          </div>
+
+          <div id="player-one" class="player player-bottom">
+          </div>
+          
+        </div>
+        <div class="input-box">
+          <span>></span>
+          <input id="player-input" type="text" placeholder="enter text"/>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
